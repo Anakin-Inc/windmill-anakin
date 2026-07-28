@@ -1,0 +1,18 @@
+{
+  "name": "anakin",
+  "integration": "Anakin",
+  "description": "Web scraping, AI search, and multi-stage agentic research. Get a free key at https://anakin.io/dashboard (500 credits, no card required).",
+  "schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "api_key": {
+        "type": "string",
+        "description": "Your Anakin API key",
+        "password": true
+      }
+    },
+    "required": ["api_key"],
+    "order": ["api_key"]
+  }
+}
