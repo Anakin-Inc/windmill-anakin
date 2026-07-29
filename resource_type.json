@@ -1,7 +1,7 @@
 {
   "name": "anakin",
   "integration": "Anakin",
-  "description": "Web scraping, AI search, and multi-stage agentic research. Get a free key at https://anakin.io/dashboard (500 credits, no card required).",
+  "description": "Web scraping, site mapping/crawling, AI search, multi-stage agentic research, a pre-built site-automation catalog (Wire), website change monitoring, AI-answer-engine visibility, and AI browser automation. Get a free key at https://anakin.io/dashboard (500 credits, no card required).",
   "schema": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
