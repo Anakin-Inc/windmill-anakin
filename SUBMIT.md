@@ -10,7 +10,7 @@ per-workspace.
 
 ## What's here
 
-28 scripts covering all 21 capabilities on the ground-truth surface
+29 scripts covering all 21 capabilities on the ground-truth surface
 (`anakin-mcp/src/client.ts` + `anakin-mcp/src/tools/*.ts`) — the original 5
 plus 23 new ones for the remaining 16 endpoint families (several split into
 submit/poll pairs, matching the existing scrape_url/get_scrape_result
@@ -18,6 +18,7 @@ convention). Full list and one-line descriptions in `README.md`.
 
 ```
 resource_type.json                    the "anakin" resource type schema
+scripts/scrape_url_and_wait.ts        scrape a page in one step (submit + poll)
 scripts/scrape_url.ts                 submit a scrape job
 scripts/get_scrape_result.ts          poll it
 scripts/search.ts                     synchronous AI search
@@ -61,7 +62,7 @@ authoring a *new* custom resource type (that namespace is for consuming
 already-hub-verified types with generated bindings — different from what
 we're submitting).
 
-All 28 scripts **typecheck clean** — installed `typescript` (v7.0.2) in a
+All 29 scripts **typecheck clean** — installed `typescript` (v7.0.2) in a
 scratch dir, ran `tsc --noEmit --strict` against every file in `scripts/`
 together with `target ES2020`, `lib: ["ES2020", "DOM"]` (Windmill's TS
 runtime is Deno-based and provides global `fetch` without an import, same
@@ -104,3 +105,14 @@ wire_read_action/wire_write_action, ai_visibility_search, browser_task)
 haven't been wired into an actual Windmill Flow with a Sleep/retry step —
 that assembly, and confirming the Flow UI's Sleep-and-retry pattern works
 as expected end-to-end, still needs to happen against a live workspace.
+
+## Bun runtime check (2026-10-16)
+
+Windmill runs TypeScript on Bun by default. Each script's `main()` was
+imported and called with Bun 1.x against `api.anakin.io` using a
+deliberately invalid key: the authenticated endpoints return the API's
+`401 Invalid or inactive API key` as a thrown `Error` with the status and
+body, and the public `GET /wire/catalog` returned real catalog data. The
+polling loop in `scrape_url_and_wait.ts` was tested against a mocked API
+for the completed, failed and timeout paths. A run with a real key inside a
+Windmill workspace is still pending.

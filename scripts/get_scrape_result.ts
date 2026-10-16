@@ -5,7 +5,7 @@ type Anakin = {
 };
 
 export async function main(anakin: Anakin, job_id: string) {
-  const res = await fetch(`https://api.anakin.io/v1/url-scraper/${job_id}`, {
+  const res = await fetch(`https://api.anakin.io/v1/url-scraper/${encodeURIComponent(job_id)}`, {
     headers: { 'X-API-Key': anakin.api_key },
   });
 
