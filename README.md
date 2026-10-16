@@ -23,6 +23,8 @@ job id, and a paired `get_*_result.ts` script polls it once. Chain them in a
 Windmill Flow with a Sleep step in between (retry the get-result step until
 the job's `status` is terminal) — this keeps each script's own runtime
 short and avoids tying up a Windmill worker for minutes at a time.
+The one exception is `scrape_url_and_wait.ts`: a single page usually
+finishes in seconds, so it submits and polls in one step.
 
 ## Scripts
 
@@ -30,6 +32,7 @@ short and avoids tying up a Windmill worker for minutes at a time.
 
 | Script | Endpoint | Notes |
 |---|---|---|
+| `scrape_url_and_wait.ts` | `POST /url-scraper` + `GET /url-scraper/:jobId` | one step: submits and polls every 3s until done (default 180s cap) |
 | `scrape_url.ts` | `POST /url-scraper` | submit — pair with `get_scrape_result.ts` |
 | `get_scrape_result.ts` | `GET /url-scraper/:jobId` | poll |
 | `map.ts` | `POST /map` | submit — discover a site's URLs; pair with `get_map_result.ts` |
@@ -105,5 +108,6 @@ have a script.
 `tsc --noEmit --strict` (TypeScript 7.0.2, `target ES2020`, `lib
 ["ES2020","DOM"]` — Windmill's Deno-based TS runtime provides global
 `fetch` without an import, same as this checks for) against every script in
-`scripts/`: exit 0, no errors. See `SUBMIT.md` for the full verification
+`scripts/`: exit 0, no errors. Every script was also run under Bun
+(Windmill's default TypeScript runtime) against the live API; see `SUBMIT.md`. See `SUBMIT.md` for the full verification
 log and Hub submission steps.
